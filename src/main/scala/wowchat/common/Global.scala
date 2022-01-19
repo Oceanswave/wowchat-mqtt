@@ -27,6 +27,6 @@ object Global {
     with mutable.MultiMap[String, TextChannel]
 
   def getTime: String = {
-    LocalDateTime.now.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+    LocalDateTime.now.format(DateTimeFormatter.ofPattern("HH:mm:ss:SSS"))
   }
 }
