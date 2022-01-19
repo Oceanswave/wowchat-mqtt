@@ -2,11 +2,11 @@ package wowchat.common
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
 import io.netty.channel.EventLoopGroup
 import net.dv8tion.jda.api.entities.TextChannel
 import wowchat.discord.Discord
 import wowchat.game.GameCommandHandler
+import wowchat.mqtt.Mqtt
 
 import scala.collection.mutable
 
@@ -16,6 +16,7 @@ object Global {
   var config: WowChatConfig = _
 
   var discord: Discord = _
+  var mqtt: Mqtt = _
   var game: Option[GameCommandHandler] = None
 
   val discordToWow = new mutable.HashMap[String, mutable.Set[WowChannelConfig]]

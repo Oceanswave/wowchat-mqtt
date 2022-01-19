@@ -1,0 +1,1 @@
+docker run -d --env-file .env --restart unless-stopped --name wowchat-area52 wowchat-mqtt

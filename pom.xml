@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>wowchat</groupId>
-    <artifactId>wowchat</artifactId>
+    <groupId>wowchat-mqtt</groupId>
+    <artifactId>wowchat-mqtt</artifactId>
     <version>1.3.7</version>
 
     <properties>
@@ -64,6 +64,13 @@
             <artifactId>emoji-java</artifactId>
             <version>5.1.1</version>
         </dependency>
+
+        <!-- MQTT -->
+        <dependency>
+            <groupId>com.hivemq</groupId>
+            <artifactId>hivemq-mqtt-client</artifactId>
+            <version>1.3.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -110,7 +117,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <finalName>wowchat</finalName>
+                    <finalName>wowchat-mqtt</finalName>
                     <filters>
                         <filter>
                             <artifact>*:*</artifact>

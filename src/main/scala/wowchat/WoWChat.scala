@@ -1,13 +1,13 @@
 package wowchat
 
 import java.util.concurrent.{Executors, TimeUnit}
-
 import wowchat.common.{CommonConnectionCallback, Global, ReconnectDelay, WowChatConfig}
 import wowchat.discord.Discord
 import wowchat.game.GameConnector
 import wowchat.realm.{RealmConnectionCallback, RealmConnector}
 import com.typesafe.scalalogging.StrictLogging
 import io.netty.channel.nio.NioEventLoopGroup
+import wowchat.mqtt.Mqtt
 
 import scala.io.Source
 
@@ -16,7 +16,7 @@ object WoWChat extends StrictLogging {
   private val RELEASE = "v1.3.7"
 
   def main(args: Array[String]): Unit = {
-    logger.info(s"Running WoWChat - $RELEASE")
+    logger.info(s"Running WoWChat MQTT - $RELEASE")
     val confFile = if (args.nonEmpty) {
       args(0)
     } else {
@@ -69,11 +69,13 @@ object WoWChat extends StrictLogging {
     }
 
     logger.info("Connecting to Discord...")
-    Global.discord = new Discord(new CommonConnectionCallback {
+    def connectionCallback = new CommonConnectionCallback {
       override def connected: Unit = gameConnectionController.connect
 
       override def error: Unit = sys.exit(1)
-    })
+    }
+
+    Global.discord = new Discord(connectionCallback)
   }
 
   private def checkForNewVersion = {
