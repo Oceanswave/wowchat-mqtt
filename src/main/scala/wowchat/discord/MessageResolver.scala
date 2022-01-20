@@ -2,9 +2,10 @@ package wowchat.discord
 
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.TextChannel
-import wowchat.common.{WowChatConfig, WowExpansion}
+import wowchat.common.{Global, WowChatConfig, WowExpansion}
 import wowchat.game.GameResources
 
+import java.time.Instant
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 
@@ -51,6 +52,28 @@ class MessageResolver(jda: JDA) {
     val pass2 = hex.r
 
     pass2.replaceAllIn(pass1.replaceAllIn(message.replace("$", "\\$"), _.group(1)), "")
+  }
+
+  def resolveTimestamp(message: String): String = {
+    val timestampValue = "^\\[(\\d+(\\.\\d+)?)\\].*".r
+      .findFirstMatchIn(message)
+      .map(_.group(1))
+      .getOrElse(null)
+
+    if (timestampValue != null) {
+      val now = Instant.now.toEpochMilli
+      val indicatedUptime = (timestampValue.toDouble * 1000).toLong
+
+      if (Global.estimatedHostBootTime == 0) {
+        Global.estimatedHostBootTime = now - indicatedUptime
+      }
+
+      val actualUptime = now - Global.estimatedHostBootTime
+      val messageTime = Instant.ofEpochMilli(Global.estimatedHostBootTime + (actualUptime - Math.abs(actualUptime - indicatedUptime)))
+      return message.replace(timestampValue, Global.dateTimeFormatter.format(messageTime))
+    }
+
+    message
   }
 
   def resolveTags(discordChannel: TextChannel, message: String, onError: String => Unit): String = {

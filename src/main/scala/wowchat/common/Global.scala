@@ -1,6 +1,6 @@
 package wowchat.common
 
-import java.time.LocalDateTime
+import java.time.{Instant, LocalDateTime, ZoneId}
 import java.time.format.DateTimeFormatter
 import io.netty.channel.EventLoopGroup
 import net.dv8tion.jda.api.entities.TextChannel
@@ -17,6 +17,7 @@ object Global {
 
   var discord: Discord = _
   var mqtt: Mqtt = _
+  var estimatedHostBootTime: Long = 0
   var game: Option[GameCommandHandler] = None
 
   val discordToWow = new mutable.HashMap[String, mutable.Set[WowChannelConfig]]
@@ -26,7 +27,9 @@ object Global {
   val guildEventsToDiscord = new mutable.HashMap[String, mutable.Set[TextChannel]]
     with mutable.MultiMap[String, TextChannel]
 
+  val dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss:SSS").withZone(ZoneId.of("America/New_York"))
+
   def getTime: String = {
-    LocalDateTime.now.format(DateTimeFormatter.ofPattern("HH:mm:ss:SSS"))
+    dateTimeFormatter.format(Instant.now)
   }
 }
